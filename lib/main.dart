@@ -1,125 +1,412 @@
 import 'package:flutter/material.dart';
+import 'package:test/cart.dart';
+import 'package:test/home.dart';
+import 'package:test/profile.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+	@@ -9,44 +12,98 @@ void main() {
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter bemo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class _MyAppState extends State<MyApp> {
+  int currentIndex = 0;
+  List<Widget> screens = [
+    const HomeScreen(),
+    const CartScreen(),
+    const ProfileScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('My App'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      backgroundColor: Colors.teal,
+      body: screens[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (tappedIndex) {
+          setState(() {
+            currentIndex = tappedIndex;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.shopping_cart,
+              ),
+              label: 'Cart'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+              ),
+              label: 'Profile'),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      drawer: Drawer(
+        child: HomeScreen(),
+      ),
+      // body: SafeArea(
+      //   child: SingleChildScrollView(
+      //     child: Wrap(
+      //       children: [
+      //         for (int i = 0; i < 50; i++)
+      //           Container(
+      //               color: i % 2 == 0 ? Colors.black : Colors.white,
+      //               height: MediaQuery.of(context).size.width / 5,
+      //               width: MediaQuery.of(context).size.width / 5),
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      // body: SafeArea(
+      //   child: Container(
+      //     // color: Colors.grey,
+      //     width: double.maxFinite,
+      //     child: Column(
+      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //       // crossAxisAlignment: CrossAxisAlignment.stretch,
+      //       children: [
+      //         Container(
+      //           color: Colors.red,
+      //           height: 100,
+      //           width: 100,
+      //         ),
+      //         Container(
+      //           color: Colors.blue,
+      //           height: 100,
+      //           width: 100,
+      //         ),
+      //         Container(
+      //           color: Colors.yellow,
+      //           height: 100,
+      //           width: 100,
+      //         ),
+      //         Container(
+      //           color: Colors.green,
+      //           height: 100,
+      //           width: 100,
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
+	@@ -152,3 +209,4 @@ class MyApp extends StatelessWidget {
+//     );
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   runApp(
+//     const MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: MyApp(),
+//     ),
+//   );
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.teal,
+//       body: SafeArea(
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Container(
+//               color: Colors.red,
+//               height: 800,
+//               width: 100,
+//             ),
+//             Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 Container(
+//                   color: Colors.yellow,
+//                   height: 100,
+//                   width: 100,
+//                 ),
+//                 Container(
+//                   color: Colors.green,
+//                   height: 100,
+//                   width: 100,
+//                 ),
+//               ],
+//             ),
+//             Container(
+//               color: Colors.blue,
+//               height: 800,
+//               width: 100,
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body:SafeArea(
+//       child: SingleChildScrollView(
+//         child: Wrap(
+//          children: [
+//               for(int i =0;i<2;i++)
+//               Container(
+//                 color: i%2==0 ?  Colors.black:Colors.white,
+//                 height:MediaQuery.of(context).size.width/ 5,
+//                 width:MediaQuery.of(context).size.width/ 5,
+//               ),
+              
+//             ],
+          
+
+//         )
+//       )
+//       )
+
+
+
+
+
+
+
+
+
+
+      // body: SafeArea(
+      //   child: Container(
+      //     color: Color.fromARGB(0, 0, 0, 0),
+      //     width: double.maxFinite,
+      //     child: Column(
+      //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //       crossAxisAlignment: CrossAxisAlignment.stretch,
+      //       children: [
+      //         Container(
+      //           color: Color.fromARGB(255, 125, 186, 154),
+      //           height: 100,
+      //           width: 100,
+      //         ),
+      //         Container(
+      //           color: Color.fromARGB(59, 187, 172, 70),
+      //           height: 100,
+      //           width: 100,
+      //         ),
+      //         Container(
+      //           color: Color.fromARGB(255, 229, 161, 208),
+      //           height: 100,
+      //           width: 100,
+      //         ),
+      //         Container(
+      //           color: Color.fromARGB(255, 185, 214, 235),
+      //           height: 100,
+      //           width: 100,
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class MyApp extends StatefulWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   State<MyApp> createState() => _MyAppState();
+// }
+
+// class _MyAppState extends State<MyApp> {
+//   var count = 0;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: Container(
+//           decoration: BoxDecoration(
+//             borderRadius: BorderRadius.circular(20),
+//             color: Colors.blue,
+//             // shape:BoxShape.circle
+//           ),
+//           child: Container(
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(100),
+//               color: Colors.red,
+//               // shape:BoxShape.circle
+//             ),
+//             padding: EdgeInsets.all(20),
+//             margin: EdgeInsets.all(20),
+//             child: Container(
+//               color: Colors.black,
+//               child: Text(
+//                 'My Container',
+//                 style: TextStyle(
+//                   fontSize: 40,
+//                   color: Colors.white,
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//       // body: Column(
+//       //   mainAxisAlignment: MainAxisAlignment.center,
+//       //   children: [
+//       //     const Center(
+//       //       child: Text(
+//       //         'The count is :',
+//       //         style: TextStyle(
+//       //           fontSize: 50,
+//       //           color: Colors.blue,
+//       //         ),
+//       //       ),
+//       //     ),
+//       //     Center(
+//       //       child: Text(
+//       //         count.toString(),
+//       //         style: TextStyle(
+//       //           fontSize: 50,
+//       //         ),
+//       //       ),
+//       //     ),
+//       // TextButton(
+//       //   onPressed: () {
+//       //     print(count);
+
+//       //     setState(() {
+//       //       count++;
+//       //     });
+
+//       //     print(count);
+//       //   },
+//       //   child: Text(
+//       //     'Click',
+//       //     style: TextStyle(
+//       //       fontSize: 50,
+//       //       color: Colors.red,
+//       //     ),
+//       //   ),
+//       // )
+//       //   ],
+//       // ),
+//       appBar: AppBar(
+//         leading: const Icon(Icons.menu),
+//         title: const Text('My App'),
+//         centerTitle: true,
+//         actions: const [
+//           Icon(Icons.search),
+//           Icon(Icons.more_vert),
+//         ],
+//       ),
+//       // floatingActionButton: FloatingActionButton(
+//       //   child: Icon(Icons.add),
+//       //   onPressed: () {
+//       //     setState(() {
+//       //       count++;
+//       //     });
+//       //   },
+//       // ),
+//     );
+//   }
+// }
